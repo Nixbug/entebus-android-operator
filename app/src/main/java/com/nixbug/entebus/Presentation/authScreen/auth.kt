@@ -48,6 +48,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -109,7 +110,8 @@ fun Auth() {
                     .clip(CircleShape)
                     .background(Color.White)
                     .border(2.dp, Color.White, CircleShape)
-                    .shadow(6.dp, CircleShape)
+                    .shadow(6.dp, CircleShape),
+                contentScale = ContentScale.Fit
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -129,167 +131,200 @@ fun Auth() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Drop Down
-
-            Text(
-                text = "Company",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp)
-            )
-
-            ExposedDropdownMenuBox(
+            //Company Drop Down
+            CompanyDropdown(
+                selectedCompany = selectedCompany,
                 expanded = expanded,
-                onExpandedChange = { expanded = !expanded }
-            ) {
-                OutlinedTextField(
-                    value = selectedCompany ?: "",
-                    onValueChange = {},
-                    readOnly = true,
-                    placeholder = { Text("Select your company") },
-                    modifier = Modifier
-                        .menuAnchor(MenuAnchorType.PrimaryEditable)
-                        .fillMaxWidth(),
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedBorderColor = Color(0xFF47C7FF),
-                        unfocusedBorderColor = Color.White,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black
-                    )
-                )
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier
-                        .background(
-                            color = Color.White,
-                        )
-                ) {
-                    companies.forEach { company ->
-
-                        DropdownMenuItem(
-                            text = { Text(company, color = Color.Black) },
-                            onClick = {
-                                selectedCompany = company
-                                expanded = false
-                            }
-                        )
-                    }
+                onExpandChange = { expanded = it },
+                companies = companies,
+                onSelect = { company ->
+                    selectedCompany = company
+                    expanded = false
                 }
-            }
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Username
-
-            Text(
-                text = "Username",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp)
-            )
-
-            OutlinedTextField(
+            // Username Field
+            UsernameField(
                 value = userName,
-                onValueChange = { userName = it },
-                placeholder = { Text("Enter your username") },
-                singleLine = true,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedBorderColor = Color(0xFF47C7FF),
-                    unfocusedBorderColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                )
+                onChange = { userName = it },
+                focusManager = focusManager
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //password
-
-            Text(
-                text = "Password",
-                fontSize = 16.sp,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp)
-            )
-
-            OutlinedTextField(
+            //password Field
+            PasswordField(
                 value = password,
-                onValueChange = { password = it },
-                placeholder = { Text("Enter your password") },
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth(),
-
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedBorderColor = Color(0xFF47C7FF),
-                    unfocusedBorderColor = Color.White,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                )
+                onChange = { password = it },
+                visible = passwordVisible,
+                toggle = { passwordVisible = !passwordVisible }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
 
             //Sign in Button
-
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8BC34A)),
-                shape = RoundedCornerShape(10.dp),
-                elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 6.dp,
-                    pressedElevation = 10.dp,
-                    focusedElevation = 8.dp
-                )
-            ) {
-                Text("Sign in", color = Color.White, fontSize = 16.sp)
-            }
+            SignInButton(onClick = { /* To Handle sign-in*/  })
 
             Spacer(modifier = Modifier.height(15.dp))
 
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CompanyDropdown(
+    selectedCompany: String?,
+    expanded: Boolean,
+    onExpandChange: (Boolean) -> Unit,
+    companies: List<String>,
+    onSelect: (String) -> Unit
+) {
+    Text(
+        text = "Company",
+        fontSize = 16.sp,
+        color = Color.White,
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp)
+    )
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = onExpandChange
+    ) {
+        OutlinedTextField(
+            value = selectedCompany ?: "",
+            onValueChange = {},
+            readOnly = true,
+            placeholder = { Text("Select your company") },
+            modifier = Modifier
+                .menuAnchor(MenuAnchorType.PrimaryEditable)
+                .fillMaxWidth(),
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedBorderColor = Color(0xFF47C7FF),
+                unfocusedBorderColor = Color.White,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black
+            )
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { onExpandChange(false) },
+            modifier = Modifier.background(Color.White)
+        ) {
+            companies.forEach { company ->
+                DropdownMenuItem(
+                    text = { Text(company, color = Color.Black) },
+                    onClick = { onSelect(company) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun UsernameField(value: String, onChange: (String) -> Unit, focusManager: androidx.compose.ui.focus.FocusManager) {
+    Text(
+        text = "Username",
+        fontSize = 16.sp,
+        color = Color.White,
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp)
+    )
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onChange,
+        placeholder = { Text("Enter your username") },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+            focusedBorderColor = Color(0xFF47C7FF),
+            unfocusedBorderColor = Color.White,
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
+        )
+    )
+}
+
+@Composable
+fun PasswordField(
+    value: String,
+    onChange: (String) -> Unit,
+    visible: Boolean,
+    toggle: () -> Unit
+) {
+    Text(
+        text = "Password",
+        fontSize = 16.sp,
+        color = Color.White,
+        fontWeight = FontWeight.SemiBold,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 5.dp)
+    )
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onChange,
+        placeholder = { Text("Enter your password") },
+        singleLine = true,
+        visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = {
+            IconButton(onClick = toggle) {
+                Icon(
+                    imageVector = if (visible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                    contentDescription = if (visible) "Hide password" else "Show password"
+                )
+            }
+        },
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+            focusedBorderColor = Color(0xFF47C7FF),
+            unfocusedBorderColor = Color.White,
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
+        )
+    )
+}
+
+@Composable
+fun SignInButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8BC34A)),
+        shape = RoundedCornerShape(10.dp),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 6.dp,
+            pressedElevation = 10.dp,
+            focusedElevation = 8.dp
+        )
+    ) {
+        Text("Sign in", color = Color.White, fontSize = 16.sp)
     }
 }
