@@ -11,10 +11,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.nixbug.entebus.ui.theme.EntebusandroidoperatorTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().apply {
+            setOnExitAnimationListener { splashScreenViewProvider ->
+                splashScreenViewProvider.iconView
+                    .animate()
+                    .alpha(0f)
+                    .setDuration(500L)
+                    .withEndAction {
+                        splashScreenViewProvider.remove()
+                    }
+                    .start()
+            }
+        }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
