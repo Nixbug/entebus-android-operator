@@ -26,7 +26,8 @@ class MainActivity : ComponentActivity() {
                         splashScreenViewProvider.remove()
                     }
                     .start()
-            }}
+            }
+        }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

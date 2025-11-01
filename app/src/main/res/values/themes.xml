@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Entebusandroidoperator" parent="android:Theme.Material.Light.NoActionBar" >
-    </style>
+    <style name="Theme.Entebusandroidoperator" parent="android:Theme.Material.Light.NoActionBar"></style>
+
     <style name="Theme.Entebusandroidoperator.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/white</item> <!-- Gradient or color -->
+        <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/entebus_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.Entebusandroidoperator</item>
     </style>
